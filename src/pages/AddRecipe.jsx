@@ -42,8 +42,7 @@ const AddRecipe = () => {
               name="description"
               value={description}
               placeholder="Description Recipe"
-              onChange={e => setDescription(e.target.value)}
-            ></textarea>
+              onChange={e => setDescription(e.target.value)}></textarea>
           </div>
         </div>
 
