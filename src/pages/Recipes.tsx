@@ -1,17 +1,17 @@
 import React from 'react'
-import { Recipe, BodyEditRecipeT } from '../component/Recipe'
-import { useContext } from 'react'
-import { RecipeContext } from '../context/RecipeContext'
+import { Recipe } from '../component/Recipe'
+import { useSelector } from 'react-redux'
+import { RootState } from '../redux'
 
 type RecipeT = {
   title: string
   description: string
   id: number
-  editRecipe: (body: BodyEditRecipeT) => void
 }
 
-const Recipes = () => {
-  const { recipes, editRecipe } = useContext(RecipeContext)
+const Recipes: React.FC = () => {
+  const recipes = useSelector((state: RootState) => state.recipesReducer.recipes)
+
   if (recipes.length === 0) {
     return <h5 className='center-align m-3'>No recipes yet</h5>
   }
@@ -20,11 +20,7 @@ const Recipes = () => {
       {recipes.map((r: RecipeT) => {
         return (
           <div key={r.id}>
-            <Recipe
-              date={r.id}
-              title={r.title}
-              description={r.description}
-              editRecipe={editRecipe}></Recipe>
+            <Recipe date={r.id} title={r.title} description={r.description}></Recipe>
           </div>
         )
       })}

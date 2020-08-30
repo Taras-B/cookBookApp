@@ -21,9 +21,16 @@ const recipeSlice = createSlice({
     addRecipe: (state, action: PayloadAction<RecipeT>) => {
       state.recipes.push(action.payload)
     },
+    editRecipe: (state, action: PayloadAction<RecipeT>) => {
+      const recipe = state.recipes.findIndex((r) => r.id === action.payload.id)
+
+      if (recipe !== -1) {
+        state.recipes[recipe] = action.payload
+      }
+    },
   },
 })
 
 export const recipesReducer = recipeSlice.reducer
 
-export const { addRecipe } = recipeSlice.actions
+export const { addRecipe, editRecipe } = recipeSlice.actions

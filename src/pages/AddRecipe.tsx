@@ -21,6 +21,7 @@ const AddRecipe = () => {
     dispatch(addRecipe(body))
     setTitle('')
     setDescription('')
+    //TODO: add action => go to home page
   }
 
   return (

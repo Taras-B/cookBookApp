@@ -1,27 +1,21 @@
 import React, { useState } from 'react'
 import moment from 'moment'
-
-export type BodyEditRecipeT = {
-  id: number
-  title: string
-  description: string
-}
+import { useDispatch } from 'react-redux'
+import { editRecipe } from '../redux/slice/recipeSlice'
 
 type PropsT = {
   title: string
   description: string
   date: number
-  editRecipe: (body: BodyEditRecipeT) => void
 }
 
-export const Recipe: React.FC<PropsT> = ({ title, description, date, editRecipe }) => {
+export const Recipe: React.FC<PropsT> = ({ title, description, date }) => {
   const [editMode, setEditMode] = useState(false)
 
   return (
     <>
       {editMode ? (
         <EditRecipe
-          editRecipe={editRecipe}
           title={title}
           description={description}
           id={date}
@@ -52,18 +46,12 @@ type PropsEditT = {
   setEditMode: (editMode: boolean) => void
   title: string
   description: string
-  editRecipe: (body: BodyEditRecipeT) => void
 }
 
-const EditRecipe: React.FC<PropsEditT> = ({
-  title,
-  description,
-  id,
-  editRecipe,
-  setEditMode,
-}) => {
+const EditRecipe: React.FC<PropsEditT> = ({ title, description, id, setEditMode }) => {
   const [locTitle, setTitle] = useState(title)
   const [locDescription, setDescription] = useState(description)
+  const dispatch = useDispatch()
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -72,7 +60,7 @@ const EditRecipe: React.FC<PropsEditT> = ({
       title: locTitle,
       description: locDescription,
     }
-    editRecipe(body)
+    dispatch(editRecipe(body))
     setEditMode(false)
   }
   return (
