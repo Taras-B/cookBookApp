@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import moment from 'moment'
 import { useDispatch } from 'react-redux'
-import { editRecipe } from '../redux/slice/recipeSlice'
+import { editRecipe, removeRecipe } from '../redux/slice/recipeSlice'
 
 type PropsT = {
   title: string
@@ -11,6 +11,8 @@ type PropsT = {
 
 export const Recipe: React.FC<PropsT> = ({ title, description, date }) => {
   const [editMode, setEditMode] = useState(false)
+
+  const dispatch = useDispatch()
 
   return (
     <>
@@ -30,9 +32,14 @@ export const Recipe: React.FC<PropsT> = ({ title, description, date }) => {
               <strong>Created:</strong> {moment(date).format('DD/MM/YYYY, HH:mm')}
             </p>
             <button
-              className='waves-effect waves-light btn red btn-small right m-r2 text-btn'
+              className='waves-effect waves-light btn  btn-small right m-r2 text-btn'
               onClick={() => setEditMode(true)}>
               Edit
+            </button>
+            <button
+              className='waves-effect waves-light btn red btn-small right m-r2 text-btn'
+              onClick={() => dispatch(removeRecipe(date))}>
+              Delete
             </button>
           </div>
         </>
