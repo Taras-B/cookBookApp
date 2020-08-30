@@ -1,0 +1,25 @@
+import {
+  configureStore,
+  getDefaultMiddleware,
+  Action,
+  ThunkAction,
+} from '@reduxjs/toolkit'
+
+import logger from 'redux-logger'
+import { recipesReducer } from './slice/recipeSlice'
+
+const reducer = {
+  recipesReducer,
+}
+
+const middleware = [...getDefaultMiddleware(), logger]
+
+export const store = configureStore({
+  reducer,
+  middleware,
+})
+
+export type RootState = ReturnType<typeof store.getState>
+
+export type AppDispatch = typeof store.dispatch
+export type AppThunk = ThunkAction<void, RootState, null, Action<string>>
