@@ -1,24 +1,17 @@
 import React from 'react'
 import { useState } from 'react'
-import { addRecipe } from '../redux/slice/recipeSlice'
+import { addRecipe, addRecipeThunk } from '../redux/slice/recipeSlice'
 import { useDispatch } from 'react-redux'
-// import { useContext } from 'react'
-// import { RecipeContext } from '../context/RecipeContext'
 
 const AddRecipe = () => {
-  // const { addRecipe } = useContext(RecipeContext)
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const body = {
-      id: Date.now(),
-      title,
-      description,
-    }
-    dispatch(addRecipe(body))
+
+    dispatch(addRecipeThunk(title, description))
     setTitle('')
     setDescription('')
     //TODO: add action => go to home page

@@ -4,12 +4,13 @@ import { useDispatch } from 'react-redux'
 import { editRecipe, removeRecipe } from '../redux/slice/recipeSlice'
 
 type PropsT = {
+  id: string
   title: string
   description: string
-  date: number
+  date: string
 }
 
-export const Recipe: React.FC<PropsT> = ({ title, description, date }) => {
+export const Recipe: React.FC<PropsT> = ({ id, title, description, date }) => {
   const [editMode, setEditMode] = useState(false)
 
   const dispatch = useDispatch()
@@ -20,7 +21,7 @@ export const Recipe: React.FC<PropsT> = ({ title, description, date }) => {
         <EditRecipe
           title={title}
           description={description}
-          id={date}
+          id={id}
           setEditMode={setEditMode}></EditRecipe>
       ) : (
         <>
@@ -38,7 +39,7 @@ export const Recipe: React.FC<PropsT> = ({ title, description, date }) => {
             </button>
             <button
               className='waves-effect waves-light btn red btn-small right m-r2 text-btn'
-              onClick={() => dispatch(removeRecipe(date))}>
+              onClick={() => dispatch(removeRecipe(id))}>
               Delete
             </button>
           </div>
@@ -49,7 +50,7 @@ export const Recipe: React.FC<PropsT> = ({ title, description, date }) => {
 }
 
 type PropsEditT = {
-  id: number
+  id: string
   setEditMode: (editMode: boolean) => void
   title: string
   description: string
@@ -63,7 +64,7 @@ const EditRecipe: React.FC<PropsEditT> = ({ title, description, id, setEditMode 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     let body = {
-      id,
+      _id: id,
       title: locTitle,
       description: locDescription,
     }

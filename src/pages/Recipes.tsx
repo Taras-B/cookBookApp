@@ -2,12 +2,13 @@ import React from 'react'
 import { Recipe } from '../component/Recipe'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux'
+// import { RecipeT } from '../types'
 
-type RecipeT = {
-  title: string
-  description: string
-  id: number
-}
+// type RecipeT = {
+//   title: string
+//   description: string
+//   id: number
+// }
 
 const Recipes: React.FC = () => {
   const recipes = useSelector((state: RootState) => state.recipesReducer.recipes)
@@ -17,10 +18,14 @@ const Recipes: React.FC = () => {
   }
   return (
     <>
-      {recipes.map((r: RecipeT) => {
+      {recipes.map((r) => {
         return (
-          <div key={r.id}>
-            <Recipe date={r.id} title={r.title} description={r.description}></Recipe>
+          <div key={r._id}>
+            <Recipe
+              date={r.date}
+              id={r._id}
+              title={r.title}
+              description={r.description}></Recipe>
           </div>
         )
       })}
