@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import moment from 'moment'
 import { useDispatch } from 'react-redux'
-import { editRecipe, removeRecipe } from '../redux/slice/recipeSlice'
+import { editRecipe, removeRecipeThunk } from '../redux/slice/recipeSlice'
 
 type PropsT = {
   id: string
@@ -39,7 +39,7 @@ export const Recipe: React.FC<PropsT> = ({ id, title, description, date }) => {
             </button>
             <button
               className='waves-effect waves-light btn red btn-small right m-r2 text-btn'
-              onClick={() => dispatch(removeRecipe(id))}>
+              onClick={() => dispatch(removeRecipeThunk(id))}>
               Delete
             </button>
           </div>

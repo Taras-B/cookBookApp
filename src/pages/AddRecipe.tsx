@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { addRecipe, addRecipeThunk } from '../redux/slice/recipeSlice'
+import { addRecipeThunk } from '../redux/slice/recipeSlice'
 import { useDispatch } from 'react-redux'
 
 const AddRecipe = () => {

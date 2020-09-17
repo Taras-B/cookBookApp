@@ -48,7 +48,7 @@ export const editRecipeAPI = async (id: string, title: string, description: stri
 }
 
 export const deleteRecipeAPI = async (id: string) => {
-  const response = await instance.post<{ success: boolean; message: string }>(
+  const response = await instance.delete<{ success: boolean; message: string }>(
     `delete/${id}`
   )
 
