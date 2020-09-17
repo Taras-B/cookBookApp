@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, AppThunk } from '..'
-import { fetchRecipesAPI, addRecipeAPI, deleteRecipeAPI } from '../../api/recipesAPI'
+import {
+  fetchRecipesAPI,
+  addRecipeAPI,
+  deleteRecipeAPI,
+  editRecipeAPI,
+} from '../../api/recipesAPI'
 import { RecipeT } from '../../types'
 
 type RecipesStateT = {
@@ -37,6 +42,7 @@ const recipeSlice = createSlice({
         state.recipes[recipe].title = action.payload.title
         state.recipes[recipe].description = action.payload.description
       }
+      state.loading = false
     },
     removeRecipe: (state, action: PayloadAction<string>) => {
       const recipe = state.recipes.findIndex((r) => r._id === action.payload)
@@ -54,12 +60,11 @@ export const recipesReducer = recipeSlice.reducer
 
 export const { editRecipe, addRecipe, startLoading, removeRecipe } = recipeSlice.actions
 
+// THUNK
 export const getRecipes = (): AppThunk => async (dispatch: AppDispatch) => {
   try {
-    console.log('fetch')
     dispatch(startLoading())
     const data = await fetchRecipesAPI()
-    console.log(data)
     if (data.success) {
       dispatch(recipeSlice.actions.loadRecipes(data.recipes))
     }
@@ -72,12 +77,27 @@ export const addRecipeThunk = (title: string, description: string): AppThunk => 
   dispatch: AppDispatch
 ) => {
   try {
-    console.log('add')
     dispatch(startLoading())
     const data = await addRecipeAPI(title, description)
-    console.log(data)
     if (data.success) {
       dispatch(addRecipe(data.recipe))
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const editRecipeThunk = (
+  id: string,
+  title: string,
+  description: string
+): AppThunk => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(startLoading())
+    const data = await editRecipeAPI(id, title, description)
+
+    if (data.success) {
+      dispatch(editRecipe({ _id: id, title, description }))
     }
   } catch (e) {
     console.log(e)
@@ -88,10 +108,8 @@ export const removeRecipeThunk = (id: string): AppThunk => async (
   dispatch: AppDispatch
 ) => {
   try {
-    console.log('delete')
     dispatch(startLoading())
     const data = await deleteRecipeAPI(id)
-    console.log(data)
     if (data.success) {
       dispatch(removeRecipe(id))
     }

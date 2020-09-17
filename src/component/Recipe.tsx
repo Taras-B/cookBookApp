@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import moment from 'moment'
 import { useDispatch } from 'react-redux'
-import { editRecipe, removeRecipeThunk } from '../redux/slice/recipeSlice'
+import { editRecipeThunk, removeRecipeThunk } from '../redux/slice/recipeSlice'
 
 type PropsT = {
   id: string
@@ -63,12 +63,12 @@ const EditRecipe: React.FC<PropsEditT> = ({ title, description, id, setEditMode 
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    let body = {
-      _id: id,
-      title: locTitle,
-      description: locDescription,
-    }
-    dispatch(editRecipe(body))
+    // let body = {
+    //   id,
+    //   title: locTitle,
+    //   description: locDescription,
+    // }
+    dispatch(editRecipeThunk(id, locTitle, locDescription))
     setEditMode(false)
   }
   return (
