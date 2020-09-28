@@ -7,6 +7,7 @@ import {
 
 import logger from 'redux-logger'
 import { recipesReducer } from './slice/recipeSlice'
+import { authReducer } from './slice/authSlice'
 
 // const preloadedState = {
 //   recipesReducer: {
@@ -22,6 +23,7 @@ import { recipesReducer } from './slice/recipeSlice'
 
 const reducer = {
   recipesReducer,
+  authReducer,
 }
 
 const middleware = [...getDefaultMiddleware(), logger]

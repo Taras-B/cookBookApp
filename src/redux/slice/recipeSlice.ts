@@ -79,11 +79,16 @@ export const addRecipeThunk = (title: string, description: string): AppThunk => 
   try {
     dispatch(startLoading())
     const data = await addRecipeAPI(title, description)
+    console.log(data)
+
     if (data.success) {
       dispatch(addRecipe(data.recipe))
     }
+    //TODO:
+    // add end loading action
+    // add error action
   } catch (e) {
-    console.log(e)
+    console.log('ERROR_ADD_RECIPE', e)
   }
 }
 
