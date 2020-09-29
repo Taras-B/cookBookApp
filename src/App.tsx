@@ -11,6 +11,7 @@ import Recipes from './pages/Recipes'
 import { Header } from './component/Header'
 
 import { getRecipes } from './redux/slice/recipeSlice'
+import AuthPage from './pages/AuthPage'
 
 function App() {
   const dispatch = useDispatch()
@@ -26,6 +27,7 @@ function App() {
         <Switch>
           <Route exact path='/' render={() => <Recipes />} />
           <Route path='/addRecipe' render={() => <AddRecipe />} />
+          <Route exact path='/login' render={() => <AuthPage />} />
         </Switch>
       </div>
     </>

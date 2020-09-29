@@ -90,16 +90,16 @@ export const loginThunk = (email: string, password: string): AppThunk => async (
 ) => {
   try {
     dispatch(startLoading())
-    const data = await authLoginAPI(email, password)
+    const { data, success } = await authLoginAPI(email, password)
     console.log(data)
 
-    if (data.success) {
-      dispatch(setTokenUser(data.data.token))
-      dispatch(loginUser({ email: data.data.email, username: data.data.username }))
+    if (success) {
+      dispatch(setTokenUser(data.token))
+      dispatch(loginUser({ email: data.email, username: data.username }))
     }
     //TODO:
     // add end loading action
-    // add error action
+    // add error(message) action
   } catch (e) {
     console.log('ERROR_ADD_AUTH:', e)
     dispatch(endLoading())
