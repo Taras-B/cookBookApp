@@ -2,53 +2,61 @@ import React from 'react'
 import { useState } from 'react'
 import { addRecipeThunk } from '../redux/slice/recipeSlice'
 import { useDispatch } from 'react-redux'
+import Container from '@material-ui/core/Container'
+import { useForm } from 'react-hook-form'
+import TextField from '@material-ui/core/TextField'
+import Grid from '@material-ui/core/Grid'
+import { useHistory } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
+
+type FormData = {
+  title: string
+  description: string
+}
 
 const AddRecipe = () => {
   const dispatch = useDispatch()
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+  const history = useHistory()
 
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
+  const { register, handleSubmit } = useForm<FormData>()
+  const onSubmit = ({ title, description }: FormData) => {
+    console.log('dataInput', title, description)
     dispatch(addRecipeThunk(title, description))
-    setTitle('')
-    setDescription('')
-    //TODO: add action => go to home page
+    history.push('/')
   }
 
   return (
-    <div className='row'>
-      <form className='col s12' onSubmit={submitForm}>
-        <div className='row'>
-          <div className='input-field col s12'>
-            <input
-              id='title'
-              type='text'
+    <Container>
+      <Grid container spacing={3} justify='center'>
+        <Grid item xs={12} sm={7}>
+          <form className='col s12' onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              inputRef={register({ required: true })}
+              label='Name Recipe'
               name='title'
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder='Name Recipe'
+              variant='outlined'
+              fullWidth
+              margin='normal'
+              required={true}
             />
-          </div>
-        </div>
-        <div className='row'>
-          <div className='input-field col s12'>
-            <textarea
-              id='description'
-              className='materialize-textarea'
+            <TextField
+              inputRef={register({ required: true })}
+              label='Description Recipe'
               name='description'
-              value={description}
-              placeholder='Description Recipe'
-              onChange={(e) => setDescription(e.target.value)}></textarea>
-          </div>
-        </div>
+              variant='outlined'
+              fullWidth
+              multiline
+              required={true}
+              margin='normal'
+            />
 
-        <button className='btn-floating btn-small waves-effect waves-light red pulse right'>
-          <i className='material-icons'>add</i>
-        </button>
-      </form>
-    </div>
+            <Button variant='contained' color='primary'>
+              add
+            </Button>
+          </form>
+        </Grid>
+      </Grid>
+    </Container>
   )
 }
 
