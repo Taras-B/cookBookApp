@@ -23,7 +23,7 @@ function App() {
   return (
     <>
       <Header />
-      <div className='container'>
+      <div>
         <Switch>
           <Route exact path='/' render={() => <Recipes />} />
           <Route path='/addRecipe' render={() => <AddRecipe />} />

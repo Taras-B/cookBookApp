@@ -1,7 +1,25 @@
 import React, { useState } from 'react'
 import moment from 'moment'
+import Grid from '@material-ui/core/Grid'
 import { useDispatch } from 'react-redux'
 import { editRecipeThunk, removeRecipeThunk } from '../redux/slice/recipeSlice'
+import Paper from '@material-ui/core/Paper'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+
+const useStyles = makeStyles({
+  root: {
+    // minWidth: 700,
+    flexGrow: 1,
+  },
+  recipeBody: {
+    padding: 10,
+  },
+  recipeHeader: {
+    textAlign: 'center',
+  },
+})
 
 type PropsT = {
   id: string
@@ -11,41 +29,51 @@ type PropsT = {
 }
 
 export const Recipe: React.FC<PropsT> = ({ id, title, description, date }) => {
+  const classes = useStyles()
   const [editMode, setEditMode] = useState(false)
 
   const dispatch = useDispatch()
 
   return (
-    <>
-      {editMode ? (
+    <Grid container justify='center' spacing={3} className={classes.root}>
+      {/* {editMode ? (
         <EditRecipe
           title={title}
           description={description}
           id={id}
           setEditMode={setEditMode}></EditRecipe>
       ) : (
-        <>
-          <div className='row collection recipe-card z-depth-3 mb-2'>
-            <h5 className='center-align'>{title}</h5>
-            <hr />
-            <p className='center-align m-1'>{description}</p>
-            <p className='ml-1'>
-              <strong>Created:</strong> {moment(date).format('DD/MM/YYYY, HH:mm')}
-            </p>
-            <button
-              className='waves-effect waves-light btn  btn-small right m-r2 text-btn'
-              onClick={() => setEditMode(true)}>
-              Edit
-            </button>
-            <button
-              className='waves-effect waves-light btn red btn-small right m-r2 text-btn'
-              onClick={() => dispatch(removeRecipeThunk(id))}>
-              Delete
-            </button>
-          </div>
-        </>
-      )}
-    </>
+        <> */}
+      <Grid item md={8} xs={12}>
+        <Paper elevation={12} className={classes.recipeBody}>
+          <Typography variant='h6' className={classes.recipeHeader}>
+            {title}
+          </Typography>
+          <Divider variant='middle' />
+          <Typography variant='body1' className='center-align m-1'>
+            {description}
+          </Typography>
+          <br />
+          <Typography>
+            <strong>Created:</strong> {moment(date).format('DD/MM/YYYY, HH:mm')}
+          </Typography>
+          <br />
+
+          <button
+            className='waves-effect waves-light btn  btn-small right m-r2 text-btn'
+            onClick={() => setEditMode(true)}>
+            Edit
+          </button>
+          <button
+            className='waves-effect waves-light btn red btn-small right m-r2 text-btn'
+            onClick={() => dispatch(removeRecipeThunk(id))}>
+            Delete
+          </button>
+        </Paper>
+      </Grid>
+      {/* </>
+      )} */}
+    </Grid>
   )
 }
 
@@ -72,7 +100,7 @@ const EditRecipe: React.FC<PropsEditT> = ({ title, description, id, setEditMode 
     setEditMode(false)
   }
   return (
-    <div className='row collection recipe-card z-depth-3 m-2'>
+    <Grid item className=''>
       <form onSubmit={submitForm}>
         <div className='row'>
           <div className='input-field col s12'>
@@ -99,6 +127,6 @@ const EditRecipe: React.FC<PropsEditT> = ({ title, description, id, setEditMode 
           Save
         </button>
       </form>
-    </div>
+    </Grid>
   )
 }
