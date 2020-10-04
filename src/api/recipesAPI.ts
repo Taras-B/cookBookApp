@@ -6,6 +6,7 @@ const instance = axios.create({
   baseURL: 'https://mycook-book-api.herokuapp.com/api/',
   headers: {
     'Access-Control-Allow-Origin': '*',
+    'Authorization': `${localStorage.getItem('token')}`,
   },
 })
 

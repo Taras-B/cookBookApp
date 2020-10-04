@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, AppThunk } from '..'
 import { authRegisterAPI, authLoginAPI } from '../../api/recipesAPI'
 import { UserT } from '../../types'
+import setAuthToken from '../../utils/setAuthToken'
 
 type AuthStateT = {
   token: null | string

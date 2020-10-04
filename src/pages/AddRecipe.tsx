@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 import { addRecipeThunk } from '../redux/slice/recipeSlice'
 import { useDispatch } from 'react-redux'
 import Container from '@material-ui/core/Container'
@@ -29,7 +28,7 @@ const AddRecipe = () => {
     <Container>
       <Grid container spacing={3} justify='center'>
         <Grid item xs={12} sm={7}>
-          <form className='col s12' onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               inputRef={register({ required: true })}
               label='Name Recipe'
@@ -50,7 +49,7 @@ const AddRecipe = () => {
               margin='normal'
             />
 
-            <Button variant='contained' color='primary'>
+            <Button type='submit' variant='contained' color='primary'>
               add
             </Button>
           </form>
