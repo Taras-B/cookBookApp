@@ -1,12 +1,13 @@
-import { instance } from '../api/recipesAPI'
+import { instance } from '../api'
 
-export const setAuthToken = (token: string) => {
+export const setAuthToken = (token: string | null) => {
   if (token) {
     console.log(token)
 
     // Apply authorization token to every request if logged in
     instance.defaults.headers.common['Authorization'] = token
   } else {
+    console.log(token)
     // Delete auth header
     delete instance.defaults.headers.common['Authorization']
   }

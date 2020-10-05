@@ -1,5 +1,11 @@
 import axios from 'axios'
-import { RecipeT } from '../types'
+import {
+  AddRecipePostT,
+  CurrentUserResponseT,
+  DefaultResponse,
+  GetRecipesResponse,
+  LoginResponseT,
+} from './types'
 
 export const instance = axios.create({
   withCredentials: false,
@@ -10,14 +16,29 @@ export const instance = axios.create({
   },
 })
 
-type GetRecipesResponse = {
-  success: boolean
-  recipes: Array<RecipeT>
-}
+export const authAPI = {
+  async register(email: string, password: string, username: string) {
+    const response = await instance.post<DefaultResponse>(`auth/register`, {
+      email,
+      password,
+      username,
+    })
 
-type DefaultResponse = {
-  success?: boolean
-  message?: string
+    return response.data
+  },
+  async login(email: string, password: string) {
+    const response = await instance.post<LoginResponseT>(`auth/login`, {
+      email,
+      password,
+    })
+
+    return response.data
+  },
+  async currentUser() {
+    const response = await instance.get<CurrentUserResponseT>(`auth/user`)
+
+    return response.data
+  },
 }
 
 export const authRegisterAPI = async (
@@ -32,14 +53,6 @@ export const authRegisterAPI = async (
   })
 
   return response.data
-}
-
-type LoginResponseT = DefaultResponse & {
-  data: {
-    username: string
-    email: string
-    token: string
-  }
 }
 
 export const authLoginAPI = async (email: string, password: string) => {
@@ -61,12 +74,6 @@ export const fetchMyRecipesAPI = async () => {
   const response = await instance.get<GetRecipesResponse & DefaultResponse>(`recipes/my`)
 
   return response.data
-}
-
-type AddRecipePostT = {
-  message: string
-  success: boolean
-  recipe: RecipeT
 }
 
 export const addRecipeAPI = async (title: string, description: string) => {

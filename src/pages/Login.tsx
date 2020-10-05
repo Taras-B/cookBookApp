@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   },
 })
 
-const Login = () => {
+const Login: React.FC = () => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const history = useHistory()

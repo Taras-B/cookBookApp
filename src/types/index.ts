@@ -6,6 +6,7 @@ export type RecipeT = {
 }
 
 export type UserT = {
+  _id: string
   username: string
   email: string
 }

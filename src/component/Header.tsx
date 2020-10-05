@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -7,6 +8,9 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { Grid } from '@material-ui/core'
+import { RootState } from '../redux'
+import { logoutUser } from '../redux/slice/authSlice'
+import { setAuthToken } from '../utils/setAuthToken'
 
 const useStyles = makeStyles({
   root: {
@@ -33,7 +37,12 @@ const useStyles = makeStyles({
 
 export function Header() {
   const classes = useStyles()
-
+  const dispatch = useDispatch()
+  const isAuth = useSelector((state: RootState) => state.authReducer.isAuthenticated)
+  const onClickLogout = () => {
+    setAuthToken(null)
+    dispatch(logoutUser())
+  }
   return (
     <div className={classes.root}>
       <AppBar position='static'>
@@ -60,11 +69,20 @@ export function Header() {
             </Grid>
             <Grid item xs={2} container justify='flex-end'>
               <Grid item>
-                <Button color='inherit'>
-                  <Link to='/auth/login' className={classes.navLink}>
-                    Login
-                  </Link>
-                </Button>
+                {/* //TODO: add load circular */}
+                {!isAuth ? (
+                  <Button color='inherit'>
+                    <Link to='/auth/login' className={classes.navLink}>
+                      Login
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button color='inherit' onClick={onClickLogout}>
+                    <Link to='/' className={classes.navLink}>
+                      Logout
+                    </Link>
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </Grid>

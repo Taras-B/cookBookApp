@@ -1,11 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, AppThunk } from '..'
-import {
-  fetchRecipesAPI,
-  addRecipeAPI,
-  deleteRecipeAPI,
-  editRecipeAPI,
-} from '../../api/recipesAPI'
+import { fetchRecipesAPI, addRecipeAPI, deleteRecipeAPI, editRecipeAPI } from '../../api'
 import { RecipeT } from '../../types'
 
 type RecipesStateT = {
@@ -24,8 +19,11 @@ const recipeSlice = createSlice({
   name: 'recipes',
   initialState: recipeState,
   reducers: {
-    startLoading: (state, action: PayloadAction) => {
+    setStartLoading: (state, action: PayloadAction) => {
       state.loading = true
+    },
+    setEndLoading: (state, action: PayloadAction) => {
+      state.loading = false
     },
     loadRecipes: (state, action: PayloadAction<Array<RecipeT>>) => {
       state.recipes = action.payload
@@ -58,12 +56,18 @@ const recipeSlice = createSlice({
 
 export const recipesReducer = recipeSlice.reducer
 
-export const { editRecipe, addRecipe, startLoading, removeRecipe } = recipeSlice.actions
+export const {
+  editRecipe,
+  addRecipe,
+  setStartLoading,
+  setEndLoading,
+  removeRecipe,
+} = recipeSlice.actions
 
 // THUNK
 export const getRecipes = (): AppThunk => async (dispatch: AppDispatch) => {
   try {
-    dispatch(startLoading())
+    dispatch(setStartLoading())
     const data = await fetchRecipesAPI()
     if (data.success) {
       dispatch(recipeSlice.actions.loadRecipes(data.recipes))
@@ -77,7 +81,7 @@ export const addRecipeThunk = (title: string, description: string): AppThunk => 
   dispatch: AppDispatch
 ) => {
   try {
-    dispatch(startLoading())
+    dispatch(setStartLoading())
     const data = await addRecipeAPI(title, description)
     console.log(data)
 
@@ -89,6 +93,7 @@ export const addRecipeThunk = (title: string, description: string): AppThunk => 
     // add error action
   } catch (e) {
     console.log('ERROR_ADD_RECIPE', e)
+    dispatch(setEndLoading())
   }
 }
 
@@ -98,7 +103,7 @@ export const editRecipeThunk = (
   description: string
 ): AppThunk => async (dispatch: AppDispatch) => {
   try {
-    dispatch(startLoading())
+    dispatch(setStartLoading())
     const data = await editRecipeAPI(id, title, description)
 
     if (data.success) {
@@ -113,7 +118,7 @@ export const removeRecipeThunk = (id: string): AppThunk => async (
   dispatch: AppDispatch
 ) => {
   try {
-    dispatch(startLoading())
+    dispatch(setStartLoading())
     const data = await deleteRecipeAPI(id)
     if (data.success) {
       dispatch(removeRecipe(id))

@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, AppThunk } from '..'
-import { authRegisterAPI, authLoginAPI } from '../../api/recipesAPI'
+import { authAPI } from '../../api'
 import { UserT } from '../../types'
 import { setAuthToken } from '../../utils/setAuthToken'
 
 type AuthStateT = {
-  token: null | string
+  token: string | null
   isAuthenticated: boolean
   loading: boolean
   user: UserT | null
@@ -34,9 +34,14 @@ const authSlice = createSlice({
     },
     setTokenUser: (state, action: PayloadAction<string>) => {
       state.token = action.payload
-      localStorage.setItem('token', action.payload)
+      localStorage.setItem('token', action.payload!)
     },
     loginUser: (state, action: PayloadAction<UserT>) => {
+      state.user = action.payload
+      state.isAuthenticated = true
+      state.loading = false
+    },
+    setLoadCurrentUser: (state, action: PayloadAction<UserT>) => {
       state.user = action.payload
       state.isAuthenticated = true
       state.loading = false
@@ -60,6 +65,7 @@ export const {
   loginUser,
   registerUser,
   logoutUser,
+  setLoadCurrentUser,
 } = authSlice.actions
 
 //___ THUNK___
@@ -71,7 +77,7 @@ export const registerThunk = (
 ): AppThunk => async (dispatch: AppDispatch) => {
   try {
     dispatch(startLoading())
-    const data = await authRegisterAPI(email, password, username)
+    const data = await authAPI.register(email, password, username)
     console.log(data)
 
     if (data.success) {
@@ -91,12 +97,12 @@ export const loginThunk = (email: string, password: string): AppThunk => async (
 ) => {
   try {
     dispatch(startLoading())
-    const { data, success } = await authLoginAPI(email, password)
+    const { data, success } = await authAPI.login(email, password)
     console.log(data)
 
     if (success) {
       dispatch(setTokenUser(data.token))
-      dispatch(loginUser({ email: data.email, username: data.username }))
+      dispatch(loginUser({ _id: data._id, email: data.email, username: data.username }))
       setAuthToken(data.token)
     }
     //TODO:
@@ -104,6 +110,26 @@ export const loginThunk = (email: string, password: string): AppThunk => async (
     // add error(message) action
   } catch (e) {
     console.log('ERROR_ADD_AUTH:', e)
+    dispatch(endLoading())
+  }
+}
+
+export const loadCurrentUserThunk = (): AppThunk => async (dispatch: AppDispatch) => {
+  try {
+    if (localStorage.getItem('token')) {
+      //@ts-ignore
+      setAuthToken(localStorage.getItem('token'))
+    }
+    dispatch(startLoading())
+    const data = await authAPI.currentUser()
+
+    if (data.success) {
+      dispatch(setLoadCurrentUser(data.user))
+    }
+  } catch (e) {
+    console.log(e)
+    dispatch(logoutUser())
+    //TODO:  add error alert login user
     dispatch(endLoading())
   }
 }
