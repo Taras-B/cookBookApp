@@ -1,15 +1,13 @@
-import axios from 'axios'
+import { instance } from '../api/recipesAPI'
 
-const setAuthToken = (token: string) => {
+export const setAuthToken = (token: string) => {
   if (token) {
     console.log(token)
 
     // Apply authorization token to every request if logged in
-    axios.defaults.headers.common['Authorization'] = token
+    instance.defaults.headers.common['Authorization'] = token
   } else {
     // Delete auth header
-    delete axios.defaults.headers.common['Authorization']
+    delete instance.defaults.headers.common['Authorization']
   }
 }
-
-export default setAuthToken

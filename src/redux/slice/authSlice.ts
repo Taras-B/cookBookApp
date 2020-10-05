@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, AppThunk } from '..'
 import { authRegisterAPI, authLoginAPI } from '../../api/recipesAPI'
 import { UserT } from '../../types'
-import setAuthToken from '../../utils/setAuthToken'
+import { setAuthToken } from '../../utils/setAuthToken'
 
 type AuthStateT = {
   token: null | string
@@ -97,6 +97,7 @@ export const loginThunk = (email: string, password: string): AppThunk => async (
     if (success) {
       dispatch(setTokenUser(data.token))
       dispatch(loginUser({ email: data.email, username: data.username }))
+      setAuthToken(data.token)
     }
     //TODO:
     // add end loading action

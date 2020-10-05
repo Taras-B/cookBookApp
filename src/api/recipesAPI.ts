@@ -1,12 +1,12 @@
 import axios from 'axios'
 import { RecipeT } from '../types'
 
-const instance = axios.create({
+export const instance = axios.create({
   withCredentials: false,
   baseURL: 'https://mycook-book-api.herokuapp.com/api/',
   headers: {
     'Access-Control-Allow-Origin': '*',
-    'Authorization': `${localStorage.getItem('token')}`,
+    // 'Authorization': `${localStorage.getItem('token')}`,
   },
 })
 
