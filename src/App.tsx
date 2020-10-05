@@ -12,6 +12,7 @@ import { Header } from './component/Header'
 
 import { getRecipes } from './redux/slice/recipeSlice'
 import Login from './pages/Login'
+import { Registration } from './pages/Registration'
 
 function App() {
   const dispatch = useDispatch()
@@ -25,9 +26,10 @@ function App() {
       <Header />
       <div>
         <Switch>
-          <Route exact path='/' render={() => <Recipes />} />
-          <Route path='/addRecipe' render={() => <AddRecipe />} />
-          <Route exact path='/auth/login' render={() => <Login />} />
+          <Route exact path='/' component={Recipes} />
+          <Route path='/addRecipe' component={AddRecipe} />
+          <Route exact path='/auth/login' component={Login} />
+          <Route exact path='/auth/registration' component={Registration} />
         </Switch>
       </div>
     </>

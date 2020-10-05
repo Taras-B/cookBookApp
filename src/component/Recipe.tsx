@@ -35,7 +35,7 @@ export const Recipe: React.FC<PropsT> = ({ id, title, description, date }) => {
   const dispatch = useDispatch()
 
   return (
-    <Grid container justify='center' spacing={3} className={classes.root}>
+    <Grid container justify='center' spacing={3} className={classes.root} wrap='wrap'>
       {/* {editMode ? (
         <EditRecipe
           title={title}
@@ -50,7 +50,7 @@ export const Recipe: React.FC<PropsT> = ({ id, title, description, date }) => {
             {title}
           </Typography>
           <Divider variant='middle' />
-          <Typography variant='body1' className='center-align m-1'>
+          <Typography variant='body1' noWrap={true}>
             {description}
           </Typography>
           <br />
