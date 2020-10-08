@@ -13,7 +13,7 @@ const recipeState: RecipesStateT = {
   loading: false,
 }
 
-type EditRecipeActionT = Omit<RecipeT, 'date'>
+type EditRecipeActionT = Omit<RecipeT, 'date' | 'user_id'>
 
 const recipeSlice = createSlice({
   name: 'recipes',

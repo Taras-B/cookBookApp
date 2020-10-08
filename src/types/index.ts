@@ -3,6 +3,7 @@ export type RecipeT = {
   title: string
   description: string
   date: string
+  user_id: UserT
 }
 
 export type UserT = {

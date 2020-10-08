@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Route, Redirect, RouteProps, RouteComponentProps } from 'react-router-dom'
+import { Route, Redirect, RouteProps } from 'react-router-dom'
 import { RootState } from '../redux'
 import { Loader } from './Loader'
 
