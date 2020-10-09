@@ -106,7 +106,6 @@ export const loginThunk = (email: string, password: string): AppThunk => async (
       setAuthToken(data.token)
     }
     //TODO:
-    // add end loading action
     // add error(message) action
   } catch (e) {
     console.log('ERROR_ADD_AUTH:', e)

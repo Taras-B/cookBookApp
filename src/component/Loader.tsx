@@ -1,21 +1,14 @@
 import React from 'react'
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Container  from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 
 export const Loader = () => {
   return (
-    <div className='center m-1'>
-      <div className='preloader-wrapper big active'>
-        <div className='spinner-layer spinner-blue-only'>
-          <div className='circle-clipper left'>
-            <div className='circle'></div>
-          </div>
-          <div className='gap-patch'>
-            <div className='circle'></div>
-          </div>
-          <div className='circle-clipper right'>
-            <div className='circle'></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container>
+      <Grid container justify='center'>
+      <CircularProgress color="secondary"/>
+      </Grid>
+    </Container>
   )
 }

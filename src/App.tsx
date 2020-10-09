@@ -2,41 +2,48 @@ import React, { useEffect } from 'react'
 
 import { Switch, Route } from 'react-router-dom'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import './App.css'
 
-import AddRecipe from './pages/AddRecipe'
-import Recipes from './pages/Recipes'
-import { Header } from './component/Header'
 
 import { getRecipes } from './redux/slice/recipeSlice'
+import { loadCurrentUserThunk } from './redux/slice/authSlice'
+import { RootState } from './redux'
+
+import AddRecipe from './pages/AddRecipe'
+import Recipes from './pages/Recipes'
 import Login from './pages/Login'
 import { Registration } from './pages/Registration'
-import { loadCurrentUserThunk } from './redux/slice/authSlice'
+import { Header } from './component/Header'
 import { PrivateRoute } from './component/PrivateRouter'
-// import { setAuthToken } from './utils/setAuthToken'
+import { Loader } from './component/Loader'
 
 function App() {
   const dispatch = useDispatch()
+  const loadingRecipe = useSelector((state: RootState) => state.recipesReducer.loading)
+  const loadingAuth = useSelector((state: RootState) => state.authReducer.loading)
+  
+
+  
   useEffect(() => {
-    // if (localStorage.getItem('token')) {
-    //   //@ts-ignore
-    //   setAuthToken(localStorage.getItem('token'))
-    // }
     dispatch(getRecipes())
     dispatch(loadCurrentUserThunk())
   }, [dispatch])
+  
   return (
     <>
       <Header />
       <div>
+        {loadingRecipe === true || loadingAuth === true ?  <h5 className='center-align m-3'><Loader/></h5> :
+  
         <Switch>
           <Route exact path='/' component={Recipes} />
           <PrivateRoute exact path='/addRecipe' component={AddRecipe} />
           <Route exact path='/auth/login' component={Login} />
           <Route exact path='/auth/registration' component={Registration} />
         </Switch>
+        }
       </div>
     </>
   )
