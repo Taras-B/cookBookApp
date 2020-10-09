@@ -41,27 +41,38 @@ export const authAPI = {
   },
 }
 
-export const authRegisterAPI = async (
-  email: string,
-  password: string,
-  username: string
-) => {
-  const response = await instance.post<DefaultResponse>(`auth/register`, {
-    email,
-    password,
-    username,
-  })
-
-  return response.data
-}
-
-export const authLoginAPI = async (email: string, password: string) => {
-  const response = await instance.post<LoginResponseT>(`auth/login`, {
-    email,
-    password,
-  })
-
-  return response.data
+export const recipeAPI = {
+  async fetchAll() {
+    const response = await instance.get<GetRecipesResponse & DefaultResponse>(`recipes/`)
+  
+    return response.data
+  },
+  async fetchUserRecipe() {
+    const response = await instance.get<GetRecipesResponse & DefaultResponse>(`recipes/my`)
+  
+    return response.data
+  },
+  async add(title: string, description: string) {
+    const response = await instance.post<AddRecipePostT & DefaultResponse>(`recipes/add`, {
+      title,
+      description,
+    })
+  
+    return response.data
+  },
+  async update(id: string, title: string, description: string) {
+    const response = await instance.post<DefaultResponse>(`recipes/edit/${id}`, {
+      title,
+      description,
+    })
+  
+    return response.data
+  },
+  async delete(id: string) {
+    const response = await instance.delete<DefaultResponse>(`recipes/delete/${id}`)
+  console.log('ERROR___',response.status)
+    return response.data
+  },
 }
 
 // Recipes

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, AppThunk } from '..'
-import { fetchRecipesAPI, addRecipeAPI, deleteRecipeAPI, editRecipeAPI } from '../../api'
+import { recipeAPI} from '../../api'
 import { RecipeT } from '../../types'
 
 type RecipesStateT = {
@@ -68,7 +68,7 @@ export const {
 export const getRecipes = (): AppThunk => async (dispatch: AppDispatch) => {
   try {
     dispatch(setStartLoading())
-    const data = await fetchRecipesAPI()
+    const data = await recipeAPI.fetchAll()
     if (data.success) {
       dispatch(recipeSlice.actions.loadRecipes(data.recipes))
     }
@@ -82,7 +82,7 @@ export const addRecipeThunk = (title: string, description: string): AppThunk => 
 ) => {
   try {
     dispatch(setStartLoading())
-    const data = await addRecipeAPI(title, description)
+    const data = await recipeAPI.add(title, description)
     console.log(data)
 
     if (data.success) {
@@ -104,7 +104,7 @@ export const editRecipeThunk = (
 ): AppThunk => async (dispatch: AppDispatch) => {
   try {
     dispatch(setStartLoading())
-    const data = await editRecipeAPI(id, title, description)
+    const data = await recipeAPI.update(id, title, description)
 
     if (data.success) {
       dispatch(editRecipe({ _id: id, title, description }))
@@ -119,11 +119,13 @@ export const removeRecipeThunk = (id: string): AppThunk => async (
 ) => {
   try {
     dispatch(setStartLoading())
-    const data = await deleteRecipeAPI(id)
+    const data = await recipeAPI.delete(id)
     if (data.success) {
       dispatch(removeRecipe(id))
     }
   } catch (e) {
+
     console.log(e)
+    dispatch(setEndLoading())
   }
 }
