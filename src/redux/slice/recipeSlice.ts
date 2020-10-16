@@ -1,16 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, AppThunk } from '..'
-import { recipeAPI} from '../../api'
+import { recipeAPI } from '../../api'
 import { RecipeT } from '../../types'
 
 type RecipesStateT = {
   recipes: Array<RecipeT>
   loading: boolean
+  filter: 'all' | 'my'
 }
 
 const recipeState: RecipesStateT = {
   recipes: [],
   loading: false,
+  filter: 'all',
 }
 
 type EditRecipeActionT = Omit<RecipeT, 'date' | 'user_id'>
@@ -24,6 +26,9 @@ const recipeSlice = createSlice({
     },
     setEndLoading: (state, action: PayloadAction) => {
       state.loading = false
+    },
+    setFilter: (state, action: PayloadAction<'all' | 'my'>) => {
+      state.filter = action.payload
     },
     loadRecipes: (state, action: PayloadAction<Array<RecipeT>>) => {
       state.recipes = action.payload
@@ -62,6 +67,7 @@ export const {
   setStartLoading,
   setEndLoading,
   removeRecipe,
+  setFilter,
 } = recipeSlice.actions
 
 // THUNK
@@ -69,6 +75,17 @@ export const getRecipes = (): AppThunk => async (dispatch: AppDispatch) => {
   try {
     dispatch(setStartLoading())
     const data = await recipeAPI.fetchAll()
+    if (data.success) {
+      dispatch(recipeSlice.actions.loadRecipes(data.recipes))
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
+export const getUserRecipesThunk = (): AppThunk => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(setStartLoading())
+    const data = await recipeAPI.fetchUserRecipe()
     if (data.success) {
       dispatch(recipeSlice.actions.loadRecipes(data.recipes))
     }
@@ -124,7 +141,6 @@ export const removeRecipeThunk = (id: string): AppThunk => async (
       dispatch(removeRecipe(id))
     }
   } catch (e) {
-
     console.log(e)
     dispatch(setEndLoading())
   }

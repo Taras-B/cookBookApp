@@ -5,7 +5,7 @@ import {
   ThunkAction,
 } from '@reduxjs/toolkit'
 
-import logger from 'redux-logger'
+// import logger from 'redux-logger'
 import { recipesReducer } from './slice/recipeSlice'
 import { authReducer } from './slice/authSlice'
 
@@ -26,7 +26,7 @@ const reducer = {
   authReducer,
 }
 
-const middleware = [...getDefaultMiddleware(), logger]
+const middleware = [...getDefaultMiddleware()]
 
 export const store = configureStore({
   reducer,

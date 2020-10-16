@@ -98,7 +98,6 @@ export const loginThunk = (email: string, password: string): AppThunk => async (
   try {
     dispatch(startLoading())
     const { data, success } = await authAPI.login(email, password)
-    console.log(data)
 
     if (success) {
       dispatch(setTokenUser(data.token))
@@ -121,6 +120,7 @@ export const loadCurrentUserThunk = (): AppThunk => async (dispatch: AppDispatch
     }
     dispatch(startLoading())
     const data = await authAPI.currentUser()
+    console.log(data)
 
     if (data.success) {
       dispatch(setLoadCurrentUser(data.user))

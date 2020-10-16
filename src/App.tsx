@@ -35,7 +35,7 @@ function App() {
     <>
       <Header />
       <div>
-        {loadingRecipe === true || loadingAuth === true ?  <h5 className='center-align m-3'><Loader/></h5> :
+        {loadingRecipe === true || loadingAuth === true ?  <Loader/> :
   
         <Switch>
           <Route exact path='/' component={Recipes} />

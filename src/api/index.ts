@@ -70,43 +70,43 @@ export const recipeAPI = {
   },
   async delete(id: string) {
     const response = await instance.delete<DefaultResponse>(`recipes/delete/${id}`)
-  console.log('ERROR___',response.status)
+  console.log('ERROR DELETE', response.status)
     return response.data
   },
 }
 
 // Recipes
-export const fetchRecipesAPI = async () => {
-  const response = await instance.get<GetRecipesResponse & DefaultResponse>(`recipes/`)
+// export const fetchRecipesAPI = async () => {
+//   const response = await instance.get<GetRecipesResponse & DefaultResponse>(`recipes/`)
 
-  return response.data
-}
-export const fetchMyRecipesAPI = async () => {
-  const response = await instance.get<GetRecipesResponse & DefaultResponse>(`recipes/my`)
+//   return response.data
+// }
+// export const fetchMyRecipesAPI = async () => {
+//   const response = await instance.get<GetRecipesResponse & DefaultResponse>(`recipes/my`)
 
-  return response.data
-}
+//   return response.data
+// }
 
-export const addRecipeAPI = async (title: string, description: string) => {
-  const response = await instance.post<AddRecipePostT & DefaultResponse>(`recipes/add`, {
-    title,
-    description,
-  })
+// export const addRecipeAPI = async (title: string, description: string) => {
+//   const response = await instance.post<AddRecipePostT & DefaultResponse>(`recipes/add`, {
+//     title,
+//     description,
+//   })
 
-  return response.data
-}
+//   return response.data
+// }
 
-export const editRecipeAPI = async (id: string, title: string, description: string) => {
-  const response = await instance.post<DefaultResponse>(`recipes/edit/${id}`, {
-    title,
-    description,
-  })
+// export const editRecipeAPI = async (id: string, title: string, description: string) => {
+//   const response = await instance.post<DefaultResponse>(`recipes/edit/${id}`, {
+//     title,
+//     description,
+//   })
 
-  return response.data
-}
+//   return response.data
+// }
 
-export const deleteRecipeAPI = async (id: string) => {
-  const response = await instance.delete<DefaultResponse>(`recipes/delete/${id}`)
+// export const deleteRecipeAPI = async (id: string) => {
+//   const response = await instance.delete<DefaultResponse>(`recipes/delete/${id}`)
 
-  return response.data
-}
+//   return response.data
+// }
