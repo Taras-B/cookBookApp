@@ -2,16 +2,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppDispatch, AppThunk } from '..'
 import { recipeAPI } from '../../api'
 import { RecipeT } from '../../types'
+import { setEndLoading, setStartLoading } from './appSlice'
 
 type RecipesStateT = {
   recipes: Array<RecipeT>
-  loading: boolean
+  
   filter: 'all' | 'my'
 }
 
 const recipeState: RecipesStateT = {
   recipes: [],
-  loading: false,
+  
   filter: 'all',
 }
 
@@ -21,22 +22,22 @@ const recipeSlice = createSlice({
   name: 'recipes',
   initialState: recipeState,
   reducers: {
-    setStartLoading: (state, action: PayloadAction) => {
-      state.loading = true
-    },
-    setEndLoading: (state, action: PayloadAction) => {
-      state.loading = false
-    },
+    // setStartLoading: (state, action: PayloadAction) => {
+    //   state.loading = true
+    // },
+    // setEndLoading: (state, action: PayloadAction) => {
+    //   state.loading = false
+    // },
     setFilter: (state, action: PayloadAction<'all' | 'my'>) => {
       state.filter = action.payload
     },
     loadRecipes: (state, action: PayloadAction<Array<RecipeT>>) => {
       state.recipes = action.payload
-      state.loading = false
+      // state.loading = false
     },
     addRecipe: (state, action: PayloadAction<RecipeT>) => {
       state.recipes.push(action.payload)
-      state.loading = false
+      // state.loading = false
     },
     editRecipe: (state, action: PayloadAction<EditRecipeActionT>) => {
       const recipe = state.recipes.findIndex((r) => r._id === action.payload._id)
@@ -45,7 +46,7 @@ const recipeSlice = createSlice({
         state.recipes[recipe].title = action.payload.title
         state.recipes[recipe].description = action.payload.description
       }
-      state.loading = false
+      // state.loading = false
     },
     removeRecipe: (state, action: PayloadAction<string>) => {
       const recipe = state.recipes.findIndex((r) => r._id === action.payload)
@@ -54,7 +55,7 @@ const recipeSlice = createSlice({
         state.recipes.splice(recipe, 1)
       }
 
-      state.loading = false
+      // state.loading = false
     },
   },
 })
@@ -64,8 +65,8 @@ export const recipesReducer = recipeSlice.reducer
 export const {
   editRecipe,
   addRecipe,
-  setStartLoading,
-  setEndLoading,
+  // setStartLoading,
+  // setEndLoading,
   removeRecipe,
   setFilter,
 } = recipeSlice.actions
@@ -77,9 +78,11 @@ export const getRecipes = (): AppThunk => async (dispatch: AppDispatch) => {
     const data = await recipeAPI.fetchAll()
     if (data.success) {
       dispatch(recipeSlice.actions.loadRecipes(data.recipes))
+      dispatch(setEndLoading())
     }
   } catch (e) {
     console.log(e)
+    dispatch(setEndLoading())
   }
 }
 export const getUserRecipesThunk = (): AppThunk => async (dispatch: AppDispatch) => {
@@ -88,9 +91,11 @@ export const getUserRecipesThunk = (): AppThunk => async (dispatch: AppDispatch)
     const data = await recipeAPI.fetchUserRecipe()
     if (data.success) {
       dispatch(recipeSlice.actions.loadRecipes(data.recipes))
+      dispatch(setEndLoading())
     }
   } catch (e) {
     console.log(e)
+    dispatch(setEndLoading())
   }
 }
 
@@ -104,9 +109,9 @@ export const addRecipeThunk = (title: string, description: string): AppThunk => 
 
     if (data.success) {
       dispatch(addRecipe(data.recipe))
+      dispatch(setEndLoading())
     }
     //TODO:
-    // add end loading action
     // add error action
   } catch (e) {
     console.log('ERROR_ADD_RECIPE', e)
@@ -125,9 +130,11 @@ export const editRecipeThunk = (
 
     if (data.success) {
       dispatch(editRecipe({ _id: id, title, description }))
+      dispatch(setEndLoading())
     }
   } catch (e) {
     console.log(e)
+    dispatch(setEndLoading())
   }
 }
 
@@ -139,6 +146,7 @@ export const removeRecipeThunk = (id: string): AppThunk => async (
     const data = await recipeAPI.delete(id)
     if (data.success) {
       dispatch(removeRecipe(id))
+      dispatch(setEndLoading())
     }
   } catch (e) {
     console.log(e)

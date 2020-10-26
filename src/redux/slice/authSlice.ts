@@ -3,18 +3,19 @@ import { AppDispatch, AppThunk } from '..'
 import { authAPI } from '../../api'
 import { UserT } from '../../types'
 import { setAuthToken } from '../../utils/setAuthToken'
+import { setEndLoading, setStartLoading } from './appSlice'
 
 type AuthStateT = {
   token: string | null
   isAuthenticated: boolean
-  loading: boolean
+  // loading: boolean
   user: UserT | null
 }
 
 const authState: AuthStateT = {
   token: localStorage.getItem('token'),
   isAuthenticated: false,
-  loading: true,
+  // loading: true,
   user: null,
 }
 
@@ -22,15 +23,15 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: authState,
   reducers: {
-    startLoading: (state) => {
-      state.loading = true
-    },
-    endLoading: (state) => {
-      state.loading = false
-    },
+    // setStartLoading: (state) => {
+    //   state.loading = true
+    // },
+    // endLoading: (state) => {
+    //   state.loading = false
+    // },
     registerUser: (state, action: PayloadAction) => {
       //   state.recipes = action.payload
-      state.loading = false
+      // state.loading = false
     },
     setTokenUser: (state, action: PayloadAction<string>) => {
       state.token = action.payload
@@ -39,19 +40,19 @@ const authSlice = createSlice({
     loginUser: (state, action: PayloadAction<UserT>) => {
       state.user = action.payload
       state.isAuthenticated = true
-      state.loading = false
+      // state.loading = false
     },
     setLoadCurrentUser: (state, action: PayloadAction<UserT>) => {
       state.user = action.payload
       state.isAuthenticated = true
-      state.loading = false
+      // state.loading = false
     },
     logoutUser: (state, action: PayloadAction) => {
       state.user = null
       state.isAuthenticated = false
       state.token = null
       localStorage.removeItem('token')
-      state.loading = false
+      // state.loading = false
     },
   },
 })
@@ -59,8 +60,8 @@ const authSlice = createSlice({
 export const authReducer = authSlice.reducer
 
 export const {
-  startLoading,
-  endLoading,
+  // setStartLoading,
+  // endLoading,
   setTokenUser,
   loginUser,
   registerUser,
@@ -76,19 +77,19 @@ export const registerThunk = (
   password: string
 ): AppThunk => async (dispatch: AppDispatch) => {
   try {
-    dispatch(startLoading())
+    dispatch(setStartLoading())
     const data = await authAPI.register(email, password, username)
     console.log(data)
 
     if (data.success) {
-      dispatch(endLoading())
+      dispatch(setEndLoading())
     }
     //TODO:
     // add end loading action
     // add error action
   } catch (e) {
     console.log('ERROR_ADD_AUTH:', e)
-    dispatch(endLoading())
+    dispatch(setEndLoading())
   }
 }
 
@@ -96,19 +97,20 @@ export const loginThunk = (email: string, password: string): AppThunk => async (
   dispatch: AppDispatch
 ) => {
   try {
-    dispatch(startLoading())
+    dispatch(setStartLoading())
     const { data, success } = await authAPI.login(email, password)
 
     if (success) {
       dispatch(setTokenUser(data.token))
       dispatch(loginUser({ _id: data._id, email: data.email, username: data.username }))
+      dispatch(setEndLoading())
       setAuthToken(data.token)
     }
     //TODO:
     // add error(message) action
   } catch (e) {
     console.log('ERROR_ADD_AUTH:', e)
-    dispatch(endLoading())
+    dispatch(setEndLoading())
   }
 }
 
@@ -118,17 +120,18 @@ export const loadCurrentUserThunk = (): AppThunk => async (dispatch: AppDispatch
       //@ts-ignore
       setAuthToken(localStorage.getItem('token'))
     }
-    dispatch(startLoading())
+    dispatch(setStartLoading())
     const data = await authAPI.currentUser()
     console.log(data)
 
     if (data.success) {
       dispatch(setLoadCurrentUser(data.user))
+      dispatch(setEndLoading())
     }
   } catch (e) {
     console.log(e)
     dispatch(logoutUser())
     //TODO:  add error alert login user
-    dispatch(endLoading())
+    dispatch(setEndLoading())
   }
 }

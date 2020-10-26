@@ -10,7 +10,7 @@ interface PrivateRoutePropsI {
 }
 
 export const PrivateRoute = ({ component: Component, ...rest }: PrivateRoutePropsI) => {
-  const loading = useSelector((state: RootState) => state.authReducer.loading)
+  const loading = useSelector((state: RootState) => state.appReducer.loading)
   const isAuthenticated = useSelector(
     (state: RootState) => state.authReducer.isAuthenticated
   )

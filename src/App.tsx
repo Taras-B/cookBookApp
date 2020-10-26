@@ -18,11 +18,14 @@ import { Registration } from './pages/Registration'
 import { Header } from './component/Header'
 import { PrivateRoute } from './component/PrivateRouter'
 import { Loader } from './component/Loader'
+import { setAlert } from './redux/slice/appSlice';
+import { CustomAlert } from './component/CustomAlert';
 
 function App() {
   const dispatch = useDispatch()
-  const loadingRecipe = useSelector((state: RootState) => state.recipesReducer.loading)
-  const loadingAuth = useSelector((state: RootState) => state.authReducer.loading)
+  // const loadingRecipe = useSelector((state: RootState) => state.recipesReducer.loading)
+  const loading = useSelector((state: RootState) => state.appReducer.loading)
+  const alert = useSelector((state: RootState) => state.appReducer.alert)
   
 
   
@@ -35,7 +38,8 @@ function App() {
     <>
       <Header />
       <div>
-        {loadingRecipe === true || loadingAuth === true ?  <Loader/> :
+      {alert ? <CustomAlert onCloseAlert={() => {dispatch(setAlert(null))}}>{alert}</CustomAlert> : null}
+        { loading === true ?  <Loader/> :
   
         <Switch>
           <Route exact path='/' component={Recipes} />
@@ -44,6 +48,7 @@ function App() {
           <Route exact path='/auth/registration' component={Registration} />
         </Switch>
         }
+
       </div>
     </>
   )

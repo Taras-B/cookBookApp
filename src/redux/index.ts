@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit'
 
 // import logger from 'redux-logger'
+import { appReducer } from './slice/appSlice'
 import { recipesReducer } from './slice/recipeSlice'
 import { authReducer } from './slice/authSlice'
 
@@ -22,6 +23,7 @@ import { authReducer } from './slice/authSlice'
 // }
 
 const reducer = {
+  appReducer,
   recipesReducer,
   authReducer,
 }
@@ -32,7 +34,6 @@ export const store = configureStore({
   reducer,
   middleware,
 })
-
 export type RootState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch
