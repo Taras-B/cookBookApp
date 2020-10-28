@@ -2,8 +2,6 @@ import { instance } from '../api'
 
 export const setAuthToken = (token: string | null) => {
   if (token) {
-    console.log(token)
-
     // Apply authorization token to every request if logged in
     instance.defaults.headers.common['Authorization'] = token
   } else {

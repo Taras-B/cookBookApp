@@ -11,3 +11,9 @@ export type UserT = {
   username: string
   email: string
 }
+export type AlertTypeMessageT = "success" | "info" | "warning" | "error" | undefined
+export type AlertT = {
+  open: boolean
+  message: string | null
+  type: AlertTypeMessageT
+}

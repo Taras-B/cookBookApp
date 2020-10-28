@@ -3,7 +3,7 @@ import { AppDispatch, AppThunk } from '..'
 import { authAPI } from '../../api'
 import { UserT } from '../../types'
 import { setAuthToken } from '../../utils/setAuthToken'
-import { setEndLoading, setStartLoading } from './appSlice'
+import { setAlert, setEndLoading, setStartLoading } from './appSlice'
 
 type AuthStateT = {
   token: string | null
@@ -23,12 +23,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: authState,
   reducers: {
-    // setStartLoading: (state) => {
-    //   state.loading = true
-    // },
-    // endLoading: (state) => {
-    //   state.loading = false
-    // },
+
     registerUser: (state, action: PayloadAction) => {
       //   state.recipes = action.payload
       // state.loading = false
@@ -40,19 +35,19 @@ const authSlice = createSlice({
     loginUser: (state, action: PayloadAction<UserT>) => {
       state.user = action.payload
       state.isAuthenticated = true
-      // state.loading = false
+
     },
     setLoadCurrentUser: (state, action: PayloadAction<UserT>) => {
       state.user = action.payload
       state.isAuthenticated = true
-      // state.loading = false
+
     },
     logoutUser: (state, action: PayloadAction) => {
       state.user = null
       state.isAuthenticated = false
       state.token = null
       localStorage.removeItem('token')
-      // state.loading = false
+
     },
   },
 })
@@ -60,14 +55,13 @@ const authSlice = createSlice({
 export const authReducer = authSlice.reducer
 
 export const {
-  // setStartLoading,
-  // endLoading,
   setTokenUser,
   loginUser,
   registerUser,
   logoutUser,
   setLoadCurrentUser,
 } = authSlice.actions
+
 
 //___ THUNK___
 
@@ -84,11 +78,10 @@ export const registerThunk = (
     if (data.success) {
       dispatch(setEndLoading())
     }
-    //TODO:
-    // add end loading action
-    // add error action
   } catch (e) {
-    console.log('ERROR_ADD_AUTH:', e)
+    console.log('ERROR_ADD_REG_AUTH:', e.response.data.message)
+    dispatch(setAlert({ message: e.response.data.message, type: 'error' }))
+
     dispatch(setEndLoading())
   }
 }
@@ -98,18 +91,23 @@ export const loginThunk = (email: string, password: string): AppThunk => async (
 ) => {
   try {
     dispatch(setStartLoading())
-    const { data, success } = await authAPI.login(email, password)
+    const { data, success, message } = await authAPI.login(email, password)
 
     if (success) {
       dispatch(setTokenUser(data.token))
       dispatch(loginUser({ _id: data._id, email: data.email, username: data.username }))
       dispatch(setEndLoading())
       setAuthToken(data.token)
+
+      dispatch(setAlert({ message: 'You success login ', type: 'success' }))
+
+    } else {
+      dispatch(setAlert({ message: message!, type: 'error' }))
+
     }
-    //TODO:
-    // add error(message) action
   } catch (e) {
     console.log('ERROR_ADD_AUTH:', e)
+    dispatch(setAlert({ message: e.response.data.message, type: 'error' }))
     dispatch(setEndLoading())
   }
 }
@@ -131,7 +129,10 @@ export const loadCurrentUserThunk = (): AppThunk => async (dispatch: AppDispatch
   } catch (e) {
     console.log(e)
     dispatch(logoutUser())
-    //TODO:  add error alert login user
     dispatch(setEndLoading())
+    if (e.response.status === 401) {
+      dispatch(setAlert({ message: 'You are not logged in', type: 'warning' }))
+    }
+
   }
 }
